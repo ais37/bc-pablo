@@ -1,6 +1,6 @@
 ﻿const Discord = require('discord.js');
 const client = new Discord.Client();
-const devs = ['494217039536324628'];
+const devs = ['439102535693762582'];
 var prefix = "#";
 const adminprefix = "#"
 
@@ -129,4 +129,4 @@ client.on('message', message => {
 });
 
 
-client.login("NTM4NzE0MTcyODI2MDU4NzYy.Dy32XQ.B6z0uesH6sbHXz9l4Vp7kmV_IhY");
+client.login(process.env.BOT_TOKEN);
