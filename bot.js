@@ -163,7 +163,6 @@ shadow.on("raw", (packet)=> {
 shadow.on("reachLimit", (limit)=> {
   let log = limit.guild.channels.find( channel => channel.name === "log-hack");
   log.send(limit.user.username+"\n استخدم الصلاحيات بكثرة");
-  limit.guild.owner.send(limit.user.username+"\nاستخدم الصلاحيات بكثرة")
   limit.member.roles.map(role => {
     limit.member.removeRole(role.id)
     .catch(log.send)
