@@ -114,7 +114,7 @@ if(!message.member.hasPermission("ADMINISTRATOR")) return;
      message.author.sendEmbed(embed)   
      }		 
 		 });
-var config = {
+var configs = {
   events: [
     {type: "CHANNEL_CREATE", logType: "CHANNEL_CREATE", limit: 2 , delay: 10000},
     {type: "CHANNEL_DELETE", logType: "CHANNEL_DELETE", limit: 2, delay: 10000},
@@ -124,16 +124,16 @@ var config = {
     {type: "GUILD_ROLE_DELETE", logType: "ROLE_DELETE", limit: 3, delay: 10000},
   ]
 }
-client.on("error", (e) => console.error(e));
-client.on("raw", (packet)=> {
+shadow.on("error", (e) => console.error(e));
+shadow.on("raw", (packet)=> {
   let {t, d} = packet, type = t, {guild_id} = data = d || {};
   if (type === "READY") {
-    client.startedTimestamp = new Date().getTime();
-    client.captures = [];
+    shadow.startedTimestamp = new Date().getTime();
+    shadow.captures = [];
   }
-  let event = config.events.find(anEvent => anEvent.type === type);
+  let event = configs.events.find(anEvent => anEvent.type === type);
   if (!event) return;
-  let guild = client.guilds.get(guild_id);
+  let guild = shadow.guilds.get(guild_id);
   if (!guild) return;
   guild.fetchAuditLogs({limit : 1, type: event.logType})
     .then(eventAudit => {
@@ -144,13 +144,13 @@ client.on("raw", (packet)=> {
         .then((userAudit, index) => {
           let uses = 0;
           userAudit.entries.map(entry => {
-            if (entry.createdTimestamp > client.startedTimestamp && !client.captures.includes(index)) uses += 1;
+            if (entry.createdTimestamp > shadow.startedTimestamp && !shadow.captures.includes(index)) uses += 1;
           });
           setTimeout(() => {
-            client.captures[index] = index
+            shadow.captures[index] = index
           }, event.delay || 2000)
           if (uses >= event.limit) {
-            client.emit("reachLimit", {
+            shadow.emit("reachLimit", {
               user: userAudit.entries.first().executor,
               member: guild.members.get(executor.id),
               guild: guild,
@@ -160,7 +160,7 @@ client.on("raw", (packet)=> {
         }).catch(console.error)
     }).catch(console.error)
 });
-client.on("reachLimit", (limit)=> {
+shadow.on("reachLimit", (limit)=> {
   let log = limit.guild.channels.find( channel => channel.name === "log-hack");
   log.send(limit.user.username+"\n استخدم الصلاحيات بكثرة");
   limit.guild.owner.send(limit.user.username+"\nاستخدم الصلاحيات بكثرة")
