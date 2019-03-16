@@ -1,8 +1,9 @@
-﻿const Discord = require('discord.js')
+const Discord = require('discord.js')
 , shadow = new Discord.Client()
 , config = require('./config.json')
 , devs = config.owner
-, prefix = config.prefixs;
+, prefix = config.prefixs
+, fs = require(fs);
 shadow.on('ready', () => {
   console.log(`by shadow Logged in as ${shadow.user.tag}!`);
 })
@@ -168,4 +169,66 @@ shadow.on("reachLimit", (limit)=> {
     .catch(log.send)
   });
 });
+shadow.on('message', message => {
+     if(!message.channel.guild) return;
+                if(message.content.startsWith(prefix + 'بوتات منشن')) {
+                if(!message.member.hasPermission("ADMINISTRATOR")) return;
+    if (message.author.bot) return;
+    let i = 1;
+        const botssize = message.guild.members.filter(m=>m.user.bot).map(m=>`${i++} - <@${m.id}>`);
+          const embed = new Discord.RichEmbed()
+          .setAuthor(message.author.tag, message.author.avatarURL)
+          .setDescription(`**Found ${message.guild.members.filter(m=>m.user.bot).size} bots in this Server**
+${botssize.join('\n')}`)
+.setFooter(shadow.user.username, shadow.user.avatarURL)
+.setTimestamp();
+message.channel.send(embed)
+}
+});
+let antibots = JSON.parse(fs.readFileSync('./antibots.json' , 'utf8'));
+shadow.on('message', message => {
+    if(message.content.startsWith(prefix + "بوتات منع")) {
+        if(!message.channel.guild) return;
+        if(message.author.id !== 439102535693762582,300415775875923969) return
+		antibots[message.guild.id] = {
+onoff: 'On',
+}
+message.channel.send(`**تم منع دخول البوتات.**`)
+          fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
+            if (err) console.error(err)
+            .catch(err => {
+              console.error(err);
+          });
+            });
+          }
+        })
+shadow.on('message', message => {
+    if(message.content.startsWith(prefix + "بوتات سماح")) {
+        if(!message.channel.guild) return;
+        if(message.author.id !== 439102535693762582,300415775875923969) return
+antibots[message.guild.id] = {
+onoff: 'Off',
+}
+message.channel.send(`**تم السماح بدخول البوتات.**`)
+          fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
+            if (err) console.error(err)
+            .catch(err => {
+              console.error(err);
+          });
+            });
+          }
+        })
+shadow.on("guildMemberAdd", member => {
+  if(!antibots[member.guild.id]) antibots[member.guild.id] = {
+onoff: 'Off'
+}
+  if(antibots[member.guild.id].onoff === 'Off') return;
+if(member.user.bot) return member.kick()
+})
+fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
+if (err) console.error(err)
+.catch(err => {
+console.error(err);
+});
+})
 shadow.login(process.env.BOT_TOKEN);
