@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 , config = require('./config.json')
 , devs = config.owner
 , prefix = config.prefixs
-, fs = require(fs);
+, fs = require('fs');
 shadow.on('ready', () => {
   console.log(`by shadow Logged in as ${shadow.user.tag}!`);
 })
