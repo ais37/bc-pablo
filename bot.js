@@ -185,50 +185,11 @@ ${botssize.join('\n')}`)
 message.channel.send(embed)
 }
 });
-let antibots = JSON.parse(fs.readFileSync('./antibots.json' , 'utf8'));
-shadow.on('message', message => {
-    if(message.content.startsWith(prefix + "بوتات منع")) {
-        if(!message.channel.guild) return;
-        if(message.author.id !== 300415775875923969) return
-		antibots[message.guild.id] = {
-onoff: 'On',
-}
-message.channel.send(`**تم منع دخول البوتات.**`)
-          fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
-            if (err) console.error(err)
-            .catch(err => {
-              console.error(err);
-          });
-            });
-          }
-        })
-shadow.on('message', message => {
-    if(message.content.startsWith(prefix + "بوتات سماح")) {
-        if(!message.channel.guild) return;
-        if(message.author.id !== 300415775875923969) return
-antibots[message.guild.id] = {
-onoff: 'Off',
-}
-message.channel.send(`**تم السماح بدخول البوتات.**`)
-          fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
-            if (err) console.error(err)
-            .catch(err => {
-              console.error(err);
-          });
-            });
-          }
-        })
 shadow.on("guildMemberAdd", member => {
-  if(!antibots[member.guild.id]) antibots[member.guild.id] = {
-onoff: 'Off'
-}
-  if(antibots[member.guild.id].onoff === 'Off') return;
 if(member.user.bot) return member.kick()
 })
-fs.writeFile("./antibots.json", JSON.stringify(antibots), (err) => {
 if (err) console.error(err)
 .catch(err => {
 console.error(err);
-});
 })
 shadow.login(process.env.BOT_TOKEN);
