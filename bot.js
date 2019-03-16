@@ -188,8 +188,4 @@ message.channel.send(embed)
 shadow.on("guildMemberAdd", member => {
 if(member.user.bot) return member.kick()
 })
-if (err) console.error(err)
-.catch(err => {
-console.error(err);
-})
 shadow.login(process.env.BOT_TOKEN);
