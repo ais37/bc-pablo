@@ -189,7 +189,7 @@ let antibots = JSON.parse(fs.readFileSync('./antibots.json' , 'utf8'));
 shadow.on('message', message => {
     if(message.content.startsWith(prefix + "بوتات منع")) {
         if(!message.channel.guild) return;
-        if(message.author.id !== 439102535693762582,300415775875923969) return
+        if(message.author.id !== 300415775875923969) return
 		antibots[message.guild.id] = {
 onoff: 'On',
 }
@@ -205,7 +205,7 @@ message.channel.send(`**تم منع دخول البوتات.**`)
 shadow.on('message', message => {
     if(message.content.startsWith(prefix + "بوتات سماح")) {
         if(!message.channel.guild) return;
-        if(message.author.id !== 439102535693762582,300415775875923969) return
+        if(message.author.id !== 300415775875923969) return
 antibots[message.guild.id] = {
 onoff: 'Off',
 }
